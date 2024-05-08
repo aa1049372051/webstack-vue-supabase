@@ -18,6 +18,7 @@ jobs:
         run: |
           pwd
           ls
+          yarn
           yarn build
 
       - name: Deploy Pages
