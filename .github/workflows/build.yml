@@ -18,6 +18,7 @@ jobs:
         run: |
           pwd
           ls
+          node -v
           yarn config set ignore-engines true
           yarn
           yarn build
