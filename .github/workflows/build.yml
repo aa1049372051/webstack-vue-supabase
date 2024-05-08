@@ -11,6 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3 # 引用 actions/checkout 这个 action，与所在的 github 仓库同名
         with:
+          node-version: 17.x
           submodules: true # Fetch Hugo themes (true OR recursive) 获取 submodule 主题
           fetch-depth: 0 # Fetch all history for .GitInfo and .Lastmod
 
