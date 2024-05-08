@@ -18,6 +18,7 @@ jobs:
         run: |
           pwd
           ls
+          export NODE_OPTIONS=--openssl-legacy-provider
           node -v
           yarn config set ignore-engines true
           yarn
