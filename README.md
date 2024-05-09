@@ -61,8 +61,6 @@ yarn lint
 
 ![image](https://github.com/aa1049372051/aa1049372051.github.io/assets/13846404/78691111-0e02-4d69-8694-c8c7267ec366)
 
-![image](https://github.com/aa1049372051/aa1049372051.github.io/assets/13846404/cb706ad4-74dc-40c7-a6ae-7006b41653cd)
-
 修改完成后yarn build就能得到编译好的代码，在dist目录，可以放在自己的服务器，也可以放在github page或vercel里面
 
 
