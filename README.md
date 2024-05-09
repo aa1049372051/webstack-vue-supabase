@@ -21,10 +21,17 @@ yarn build
 yarn lint
 ```
 
-## vue2+supabase 实现网址导航，不需要服务器也能做自己的导航网站
+## vue2+supabase 实现网址导航，不需要服务器也能做支持管理的的导航网站，可在管理台添加更新导航数据
 ## 前端使用vue2+element-ui+supabase实现
 ## 可以将其部署到github page 或者vercel
 ## 本项目使用github page，每次push后自动更新
+
+## [demo](https://aa1049372051.github.io/webstack-vue-supabase/)
+
+![image](https://github.com/aa1049372051/aa1049372051.github.io/assets/13846404/c3dd89d9-a566-479d-b9af-1946f40a7840)
+
+![image](https://github.com/aa1049372051/aa1049372051.github.io/assets/13846404/7ef8303e-629f-4af4-8058-c1c93e100e31)
+
 
 ## 第一步
 去[supabase](https://supabase.com/)官网注册账号，可以使用github账号登录，然后新建项目，复制项目url和service_role(不是anon,本来操作表anon是可以的，但是anon不能操作仓库)替换src/config.js中的
@@ -92,7 +99,7 @@ SUPABASE_URL 和 SUPABASE_KEY
 ## 第五步
 在管理台=》我的里面还添加了添加测试数据的功能；数据来源是src/assets/data.json;
 分类表的icon就是从data.json中取的，网站的logo也有;
-大家可以直接修改data.json功能然后在管理台初始化数据
+大家可以直接修改data.json文件然后在管理台初始化数据
 
 ![image](https://github.com/aa1049372051/aa1049372051.github.io/assets/13846404/7cdbbe8a-0a02-4bc5-8f8d-bf49ad7a6121)
 
