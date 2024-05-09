@@ -20,6 +20,9 @@ jobs:
           ls
           export NODE_OPTIONS=--openssl-legacy-provider
           node -v
+          echo "SUPABASE_URL='${{ secrets.SUPABASE_URL }}'"  >> .env.prod
+          echo "SUPABASE_key='${{ secrets.SUPABASE_key }}'"  >> .env.prod
+          cat .env.prod
           yarn config set ignore-engines true
           yarn
           yarn build

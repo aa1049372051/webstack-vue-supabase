@@ -16,9 +16,9 @@ const routes = [
     { path: '/about', component: About, name: 'about' },
     { path: '/home', component: Home, name: 'home' },
     { path: '/admin', component: AdminIndex, name: 'admin_index' },
-    { path: '/admin/site', component: AdminSite, name: 'admin_site' },
-    { path: '/admin/login', component: AdminLogin, name: 'admin_login' },
-    { path: '/admin/user', component: AdminUser, name: 'admin_user' },
+    { path: '/adminsite', component: AdminSite, name: 'admin_site' },
+    { path: '/adminlogin', component: AdminLogin, name: 'admin_login' },
+    { path: '/adminuser', component: AdminUser, name: 'admin_user' },
 ]
 export default new Router({
     mode: 'history',
