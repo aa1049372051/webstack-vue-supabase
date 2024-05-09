@@ -21,7 +21,7 @@ const routes = [
     { path: '/adminuser', component: AdminUser, name: 'admin_user' },
 ]
 export default new Router({
-    mode: 'history',
+    mode: 'hash',
     routes: routes,
     scrollBehavior: () => {
         return {

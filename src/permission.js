@@ -1,16 +1,19 @@
 import router from './router';
 
-const needLogin = [
+const notNeedLogin = [
     'index', 'about', 'home'
 ]
 router.beforeEach((to, from, next) => {
+    console.log(to, from)
     if (!to.name) {
-        next()
+        router.push({
+            name: 'index',
+            query: to.query
+        });
         return
     }
-    console.log(to, from)
     let loginDataSyj = window.localStorage.getItem('loginData-webstack');
-    if (needLogin.indexOf(to.name) > -1) {
+    if (notNeedLogin.indexOf(to.name) > -1) {
         next()
         return
     } else {
