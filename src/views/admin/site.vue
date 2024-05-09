@@ -37,6 +37,9 @@
       </el-table-column>
       <el-table-column align="center" prop="url" label="url"> </el-table-column>
       <el-table-column align="center" prop="logo" label="logo">
+        <template slot-scope="scope">
+          <img :src="scope.row.logoUrl" class="lozad img-circle" width="40" />
+        </template>
       </el-table-column>
       <el-table-column align="center" prop="sort" label="排序">
       </el-table-column>
@@ -57,6 +60,9 @@
         <el-form-item prop="title" label="名称">
           <el-input v-model="form.title"></el-input>
         </el-form-item>
+        <el-form-item prop="url" label="描述">
+          <el-input v-model="form.description"></el-input>
+        </el-form-item>
         <el-form-item prop="url" label="url地址">
           <el-input v-model="form.url"></el-input>
         </el-form-item>
@@ -64,8 +70,20 @@
           <el-input v-model="form.sort"></el-input>
         </el-form-item>
         <el-form-item label="图标">
-          <upload></upload>
-          <el-input v-model="form.logo"></el-input>
+          <el-radio-group v-model="form.logotype">
+            <el-radio :label="1">手填</el-radio>
+            <el-radio :label="2">上传</el-radio>
+          </el-radio-group>
+          <upload
+            ref="upload"
+            @success="uploadSuccess"
+            v-if="form.logotype == 2"
+          ></upload>
+          <el-input
+            placeholder="例如:assets/images/logos/leiphone.png;图标文件从public/assets/images/logos下选择"
+            v-if="form.logotype == 1"
+            v-model="form.logo"
+          ></el-input>
         </el-form-item>
         <el-form-item prop="pid" label="上级">
           <el-select
@@ -118,6 +136,7 @@ import {
   addSite,
   updateSite,
   getFirstCategoryList,
+  getFileUrl,
 } from "../../utils/supabase.js";
 export default {
   name: "site",
@@ -140,6 +159,8 @@ export default {
         pid: null,
         pid2: null,
         url: null,
+        logotype: 1,
+        description: "",
       },
       showDg: false,
       list: [],
@@ -150,9 +171,13 @@ export default {
         pid: [{ required: true, message: "请输入", trigger: "blur" }],
       },
       multipleSelection: [],
+      files: [],
     };
   },
   methods: {
+    uploadSuccess(files) {
+      this.files = files;
+    },
     deleteSelected() {
       if (!this.multipleSelection.length) {
         this.$message.error("没有选中数据");
@@ -195,24 +220,34 @@ export default {
             return;
           }
           let data;
+          let logo = this.form.logo;
+          if (this.form.logotype == 2) {
+            if (this.files.length) {
+              logo = this.files[0]["path"];
+            }
+          }
           if (this.form.id) {
             data = await updateSite(this.form.id, {
               category_id: form.pid2 || form.pid,
               sort: form.sort,
               title: form.title,
-              logo: form.logo,
+              logo: logo,
               is_used: form.is_used,
               url: form.url,
               id: form.id,
+              logotype: form.logotype,
+              description: form.description,
             });
           } else {
             data = await addSite(
               {
                 sort: form.sort,
                 title: form.title,
-                logo: form.logo,
+                logo: logo,
                 is_used: form.is_used,
                 url: form.url,
+                logotype: form.logotype,
+                description: form.description,
               },
               form.pid2 || form.pid
             );
@@ -235,12 +270,20 @@ export default {
       this.showDg = true;
       this.$nextTick(() => {
         this.$refs["formName"].resetFields();
+        this.$refs["upload"].clean();
         this.tools.clearFormData(this.form);
+        this.form.logotype = 1;
       });
     },
     async getList() {
-      this.tableData = await getSiteList();
-      this.list = this.tableData.filter((item) => item.parent_id == 0);
+      let list = await getSiteList();
+      list.forEach((item) => {
+        item.logoUrl = item.logo;
+        if (item.logotype == 2) {
+          item.logoUrl = getFileUrl(item.logo);
+        }
+      });
+      this.tableData = list;
     },
     del(item) {
       this.$confirm("此操作将永久删除, 是否继续?", "提示", {
@@ -272,6 +315,18 @@ export default {
         } else {
           val.pid = val.category_id;
         }
+      }
+      let files = [];
+      if (val.logotype == 2) {
+        this.files = files = [
+          {
+            url: val.logoUrl,
+            path: val.logo,
+          },
+        ];
+        this.$nextTick(() => {
+          this.$refs["upload"].setFiles(files);
+        });
       }
     },
     async getCategory() {

@@ -4,10 +4,13 @@
       <!-- 版权信息 -->
       <div class="footer-text">
         &copy; 2017-2019
-        <a href="#"><strong>WebStack</strong></a> 
-        design by <a href="http://viggoz.com" target="_blank"><strong>Viggo</strong></a>
+        <a href="#"><strong>WebStack</strong></a>
+        design by
+        <a href="https://github.com/aa1049372051" target="_blank"
+          ><strong>Gong</strong></a
+        >
       </div>
-      
+
       <div class="go-up">
         <a href="#" rel="go-top"><i class="fa-angle-up"></i></a>
       </div>
@@ -17,10 +20,8 @@
 
 <script>
 export default {
-  name: 'Footer'
-}
+  name: "Footer",
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

@@ -1,6 +1,8 @@
 
 import { createClient } from '@supabase/supabase-js'
 import config from '@/config.js'
+import md5 from 'js-md5';
+
 
 const supabaseUrl = config.supabaseUrl
 // const supabaseKey = process.env.SUPABASE_KEY
@@ -15,11 +17,12 @@ export async function getMainList() {
         .from("category")
         .select(
             `*,site(
-  title,url,logo,desc
+  title,url,logo,description,logotype
 ),children(*,site(
-  title,url,logo,desc
+  title,url,logo,description,logotype
 ))`
         )
+        .order('sort', { ascending: true })
         .eq("parent_id", 0);
     return data;
 }
@@ -30,6 +33,7 @@ export async function getCategoryList() {
         .select(
             `*,father(name),site(*),children(*)`,
         )
+        .order('id', { ascending: true })
     return data;
 }
 
@@ -81,6 +85,7 @@ export async function getSiteList() {
         .select(
             `*,category(*,father(*))`
         )
+        .order('id', { ascending: true })
     return data;
 }
 
@@ -90,7 +95,7 @@ export async function addSite(item, pid) {
         url: item.url,
         logo: item.logo,
         title: item.title,
-        desc: item.desc,
+        description: item.description,
         category_id: pid,
     }).select();
     return data;
@@ -139,13 +144,20 @@ export async function updateUser(id, value) {
 
 export async function uploadFile(avatarFile) {
     let file = avatarFile.raw
+    let filekey = md5(file.name)
     const { data, error } = await supabase
         .storage
-        .from('webstack-vue')
-        .upload(file.name, file, {
+        .from(config.supabaseBucketName)
+        .upload(filekey, file, {
             cacheControl: '3600',
-            upsert: false
+            upsert: true
         })
-    return { data, error }
+    let fileurl = getFileUrl(filekey)
+    return { data, error, filekey, fileurl }
+}
+
+export function getFileUrl(filekey) {
+    const { data } = supabase.storage.from(config.supabaseBucketName).getPublicUrl(filekey)
+    return data.publicUrl
 }
 

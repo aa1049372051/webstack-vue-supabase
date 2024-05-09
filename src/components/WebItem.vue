@@ -15,13 +15,13 @@
         >
           <div class="xe-comment-entry">
             <a class="xe-user-img">
-              <img :src="web.logo" class="lozad img-circle" width="40" />
+              <img :src="getLogo(web)" class="lozad img-circle" width="40" />
             </a>
             <div class="xe-comment">
               <a href="#" class="xe-user-name overflowClip_1">
                 <strong>{{ web.title }}</strong>
               </a>
-              <p class="overflowClip_2">{{ web.desc }}</p>
+              <p class="overflowClip_2">{{ web.description }}</p>
             </div>
           </div>
         </div>
@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import { getFileUrl } from "../utils/supabase.js";
 export default {
   name: "WebItem",
   props: {
@@ -41,6 +42,13 @@ export default {
   methods: {
     openweb(url) {
       window.open(url, "_blank");
+    },
+    getLogo(data) {
+      let logo = data.logo;
+      if (data.logotype == 2) {
+        return getFileUrl(logo);
+      }
+      return logo;
     },
   },
 };

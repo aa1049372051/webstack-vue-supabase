@@ -3,11 +3,12 @@
     <el-upload
       :auto-upload="false"
       class="avatar-uploader"
-      action="https://jsonplaceholder.typicode.com/posts/"
-      :show-file-list="false"
       :on-success="handleAvatarSuccess"
       :on-change="fileChange"
       :before-upload="beforeAvatarUpload"
+      :file-list="files"
+      list-type="picture-card"
+      action=""
     >
       <img v-if="imageUrl" :src="imageUrl" class="avatar" />
       <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -22,21 +23,35 @@ export default {
   data() {
     return {
       imageUrl: "",
+      files: [],
     };
   },
+  props: {},
   methods: {
+    clean() {
+      this.files = [];
+    },
+    setFiles(files) {
+      this.files = files;
+    },
     handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);
     },
     async fileChange(file) {
-      console.log(file);
       let data = await uploadFile(file);
-      console.log(data);
+      if (!data.error) {
+        this.files = [
+          {
+            name: file.name,
+            url: data.fileurl,
+            path: data.filekey,
+          },
+        ];
+      }
+      this.$emit("success", this.files);
     },
     async beforeAvatarUpload(file) {
       console.log(file);
-      let data = await uploadFile(file);
-      console.log(data);
       return true;
       //   const isJPG = file.type === "image/jpeg";
       //   const isLt2M = file.size / 1024 / 1024 < 2;
