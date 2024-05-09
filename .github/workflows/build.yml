@@ -19,9 +19,9 @@ jobs:
           pwd
           export NODE_OPTIONS=--openssl-legacy-provider
           node -v
-          echo "VUE_APP_SUPABASE_URL='${{ secrets.SUPABASE_URL }}'"  >> .env.prod
-          echo "VUE_APP_SUPABASE_key='${{ secrets.SUPABASE_key }}'"  >> .env.prod
-          cat .env.prod
+          echo "VUE_APP_SUPABASE_URL='${{ secrets.SUPABASE_URL }}'"  >> .env.production
+          echo "VUE_APP_SUPABASE_key='${{ secrets.SUPABASE_key }}'"  >> .env.production
+          cat .env.production
           yarn config set ignore-engines true
           yarn
           yarn build
