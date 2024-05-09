@@ -1,3 +1,4 @@
+console.log(process.env.VUE_APP_SUPABASE_URL)
 const config = {
     //process.env.VUE_APP_SUPABASE_KEY 可以在github仓库中设置变量，直接读取仓库配置以防暴露
     supabaseUrl: process.env.VUE_APP_SUPABASE_URL || 'https://aoupcgqekxzfhxsmejsn.supabase.co',
