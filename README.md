@@ -102,5 +102,17 @@ SUPABASE_URL 和 SUPABASE_KEY
 ![image](https://github.com/aa1049372051/aa1049372051.github.io/assets/13846404/7cdbbe8a-0a02-4bc5-8f8d-bf49ad7a6121)
 
 
+## 第六步
+坑爹，跑了几天发现，supabase会将七天内不活动的project给暂停，必须去官网手动恢复(免费项目会被暂停,购买pro可以不担心被暂停)，恢复后url和key就会更新
+所以我单独写了一个js文件，访问数据库，把它放在服务器中用定时任务每天跑一次
+cron/supabase.js
+
+ * 1.安装依赖
+ * npm install @supabase/supabase-js
+ * 2.更新自己的url和key
+ * 3.node supabase.js
+ * 4.添加定时任务每天跑一次
+    我是在linux里面跑的
+    0  4 * * *  node /projects/node-pro/cron-supabase/supabase.js
 
 
