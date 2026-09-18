@@ -27,8 +27,19 @@ jobs:
       - name: Install Supabase client
         run: npm install --no-save --ignore-scripts @supabase/supabase-js@2.43.2
 
+      - name: Check Supabase environment
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL || vars.SUPABASE_URL || secrets.VUE_APP_SUPABASE_URL || vars.VUE_APP_SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY || vars.SUPABASE_ANON_KEY || secrets.VUE_APP_SUPABASE_ANON_KEY || vars.VUE_APP_SUPABASE_ANON_KEY }}
+        run: |
+          test -n "$SUPABASE_URL" || { echo "SUPABASE_URL is empty"; exit 1; }
+          test -n "$SUPABASE_ANON_KEY" || { echo "SUPABASE_ANON_KEY is empty"; exit 1; }
+          echo "Supabase environment variables are available"
+
       - name: Run read-only query
         env:
-          VUE_APP_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          VUE_APP_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL || vars.SUPABASE_URL || secrets.VUE_APP_SUPABASE_URL || vars.VUE_APP_SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY || vars.SUPABASE_ANON_KEY || secrets.VUE_APP_SUPABASE_ANON_KEY || vars.VUE_APP_SUPABASE_ANON_KEY }}
+          VUE_APP_SUPABASE_URL: ${{ secrets.VUE_APP_SUPABASE_URL || vars.VUE_APP_SUPABASE_URL || secrets.SUPABASE_URL || vars.SUPABASE_URL }}
+          VUE_APP_SUPABASE_ANON_KEY: ${{ secrets.VUE_APP_SUPABASE_ANON_KEY || vars.VUE_APP_SUPABASE_ANON_KEY || secrets.SUPABASE_ANON_KEY || vars.SUPABASE_ANON_KEY }}
         run: node cron/supabase.js

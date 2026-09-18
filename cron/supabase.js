@@ -4,7 +4,7 @@ const supabaseUrl = process.env.SUPABASE_URL || process.env.VUE_APP_SUPABASE_URL
 const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || process.env.VUE_APP_SUPABASE_ANON_KEY
 
 if (!supabaseUrl || !supabaseAnonKey) {
-  console.error('缺少 SUPABASE_URL / VUE_APP_SUPABASE_URL 或 SUPABASE_ANON_KEY / VUE_APP_SUPABASE_ANON_KEY 环境变量')
+  console.error('缺少 Supabase 环境变量，请配置 SUPABASE_URL 和 SUPABASE_ANON_KEY（或对应的 VUE_APP_* 变量）')
   process.exit(1)
 }
 
