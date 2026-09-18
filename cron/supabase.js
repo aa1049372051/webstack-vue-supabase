@@ -1,25 +1,29 @@
-/**
- * 1.安装依赖
- * npm install @supabase/supabase-js
- * 2.更新自己的url和key
- * 3.node supabase.js
- * 4.添加定时任务每天跑一次
- * 
- */
-// import { createClient } from '@supabase/supabase-js'
+const { createClient } = require('@supabase/supabase-js')
 
-const createClient = require('@supabase/supabase-js').createClient;
+const supabaseUrl = process.env.SUPABASE_URL
+const supabaseAnonKey = process.env.SUPABASE_ANON_KEY
 
-// Create a single supabase client for interacting with your database
-const url=''
-const key=''
-const supabase = createClient(url,key)
-
-async function getData(){
-  const { data,error } = await supabase
-  .from('category')
-  .select();
-  console.log(data,error)
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error('缺少 SUPABASE_URL 或 SUPABASE_ANON_KEY 环境变量')
+  process.exit(1)
 }
 
-getData()
+const supabase = createClient(supabaseUrl, supabaseAnonKey)
+
+async function keepAlive() {
+  const { error } = await supabase
+    .from('category')
+    .select('id')
+    .limit(1)
+
+  if (error) {
+    throw error
+  }
+
+  console.log(`[${new Date().toISOString()}] Supabase keep-alive success`)
+}
+
+keepAlive().catch(error => {
+  console.error(error.message || error)
+  process.exit(1)
+})

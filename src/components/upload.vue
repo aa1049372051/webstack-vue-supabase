@@ -3,7 +3,6 @@
     <el-upload
       :auto-upload="false"
       class="avatar-uploader"
-      :on-success="handleAvatarSuccess"
       :on-change="fileChange"
       :before-upload="beforeAvatarUpload"
       :file-list="files"
@@ -17,55 +16,68 @@
 </template>
 
 <script>
-import { uploadFile } from "../utils/supabase.js";
+import { uploadFile } from '../utils/supabase.js'
+
+const ALLOW_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+const MAX_SIZE_MB = 2
+
 export default {
-  name: "upload",
+  name: 'upload',
   data() {
     return {
-      imageUrl: "",
+      imageUrl: '',
       files: [],
-    };
+    }
   },
   props: {},
   methods: {
     clean() {
-      this.files = [];
+      this.files = []
+      this.imageUrl = ''
     },
     setFiles(files) {
-      this.files = files;
-    },
-    handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
+      this.files = files
+      this.imageUrl = files && files.length ? files[0].url : ''
     },
     async fileChange(file) {
-      let data = await uploadFile(file);
-      if (!data.error) {
+      if (!this.beforeAvatarUpload(file.raw)) {
+        this.files = []
+        this.$emit('success', this.files)
+        return
+      }
+
+      try {
+        const data = await uploadFile(file)
         this.files = [
           {
             name: file.name,
             url: data.fileurl,
             path: data.filekey,
           },
-        ];
+        ]
+        this.imageUrl = data.fileurl
+        this.$emit('success', this.files)
+      } catch (error) {
+        this.files = []
+        this.imageUrl = ''
+        this.$emit('success', this.files)
+        this.$message.error(error.message || '上传失败')
       }
-      this.$emit("success", this.files);
     },
-    async beforeAvatarUpload(file) {
-      console.log(file);
-      return true;
-      //   const isJPG = file.type === "image/jpeg";
-      //   const isLt2M = file.size / 1024 / 1024 < 2;
+    beforeAvatarUpload(file) {
+      const isAllowType = ALLOW_TYPES.indexOf(file.type) > -1
+      const isLtMaxSize = file.size / 1024 / 1024 < MAX_SIZE_MB
 
-      //   if (!isJPG) {
-      //     this.$message.error("上传头像图片只能是 JPG 格式!");
-      //   }
-      //   if (!isLt2M) {
-      //     this.$message.error("上传头像图片大小不能超过 2MB!");
-      //   }
-      //   return isJPG && isLt2M;
+      if (!isAllowType) {
+        this.$message.error('只能上传 JPG、PNG、WebP 或 GIF 图片')
+      }
+      if (!isLtMaxSize) {
+        this.$message.error(`图片大小不能超过 ${MAX_SIZE_MB}MB`)
+      }
+      return isAllowType && isLtMaxSize
     },
   },
-};
+}
 </script>
 
 <style>
