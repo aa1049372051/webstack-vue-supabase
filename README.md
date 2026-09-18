@@ -413,11 +413,41 @@ GitHub token 建议使用最小权限：
 2. 构建命令设置为：`yarn build`。
 3. 输出目录设置为：`dist`。
 
-## 可选：Supabase 保活脚本
+## 可选：Supabase 保活
 
-免费 Supabase 项目长时间不活跃可能会暂停。项目提供了一个可选脚本：[cron/supabase.js](cron/supabase.js)，用于定期做一次低权限只读查询。
+免费 Supabase 项目长时间不活跃可能会暂停。项目提供了一个可选脚本：[cron/supabase.js](cron/supabase.js)，用于执行一次低权限只读查询：
 
-使用方式：
+```js
+category.select('id').limit(1)
+```
+
+这个脚本只需要 Supabase URL 和 `anon` / `publishable` key，不需要 `service_role`。
+
+### GitHub Actions 定时执行
+
+项目已提供定时保活 workflow：[.github/workflows/supabase-keep-alive.yml](.github/workflows/supabase-keep-alive.yml)。
+
+默认配置为每 3 天执行一次，也支持在 GitHub 页面手动触发：
+
+```yaml
+on:
+  schedule:
+    - cron: '0 4 */3 * *'
+  workflow_dispatch:
+```
+
+> GitHub Actions 的 cron 使用 UTC 时间，不是北京时间。
+
+使用前需要在仓库的 **Settings -> Secrets and variables -> Actions** 中配置：
+
+| Secret | 说明 |
+| --- | --- |
+| `SUPABASE_URL` | Supabase 项目 URL |
+| `SUPABASE_ANON_KEY` | Supabase `anon` / `publishable` key |
+
+配置完成后，可在 GitHub 仓库的 **Actions -> Supabase Keep Alive** 中手动运行一次，确认脚本可以成功连接 Supabase。
+
+### 本地手动执行
 
 ```bash
 SUPABASE_URL=https://your-project-ref.supabase.co \
@@ -425,17 +455,12 @@ SUPABASE_ANON_KEY=your-anon-or-publishable-key \
 node cron/supabase.js
 ```
 
-Linux crontab 示例：
-
-```cron
-0 4 * * * SUPABASE_URL=https://your-project-ref.supabase.co SUPABASE_ANON_KEY=your-anon-or-publishable-key node /path/to/webstack-vue-supabase/cron/supabase.js
-```
-
 注意：
 
 - 保活脚本不需要 `service_role`。
 - 不要把真实 key 写死到脚本里。
 - 不要提交包含真实 key 的 `.env` 文件。
+- 如果你不需要保活功能，可以删除 [.github/workflows/supabase-keep-alive.yml](.github/workflows/supabase-keep-alive.yml)。
 
 ## 常见问题
 

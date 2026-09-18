@@ -1,0 +1,34 @@
+name: Supabase Keep Alive
+
+on:
+  schedule:
+    # GitHub Actions uses UTC. Run every 3 days at 04:00 UTC.
+    - cron: '0 4 */3 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install Supabase client
+        run: npm install --no-save --ignore-scripts @supabase/supabase-js@2.43.2
+
+      - name: Run read-only query
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: node cron/supabase.js

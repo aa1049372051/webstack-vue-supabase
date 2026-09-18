@@ -208,6 +208,28 @@
 }
 
 .admin-shell .el-button,
+.admin-login .el-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.admin-shell .el-button > span,
+.admin-login .el-button > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.admin-shell .el-button [class*="el-icon-"],
+.admin-login .el-button [class*="el-icon-"] {
+  line-height: 1;
+}
+
+.admin-shell .el-button,
 .admin-login .el-button,
 .admin-shell .el-input__inner,
 .admin-login .el-input__inner,
