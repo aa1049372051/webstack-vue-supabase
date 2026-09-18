@@ -29,6 +29,6 @@ jobs:
 
       - name: Run read-only query
         env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          VUE_APP_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          VUE_APP_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: node cron/supabase.js

@@ -9,48 +9,69 @@
     </div>
 
     <div class="admin-settings-grid">
-      <section class="admin-settings-panel">
+      <section class="admin-settings-panel admin-security-panel">
         <div class="admin-settings-title">
           <span class="admin-settings-icon"><i class="el-icon-lock"></i></span>
-          <h3>账号安全</h3>
+          <div>
+            <h3>账号安全</h3>
+            <span>管理登录账号与访问密码</span>
+          </div>
+        </div>
+
+        <div class="admin-account-summary">
+          <span class="admin-account-avatar"><i class="el-icon-message"></i></span>
+          <div class="admin-account-details">
+            <span>登录账号</span>
+            <strong>{{ form.email || '当前管理员' }}</strong>
+          </div>
+          <span class="admin-account-role">管理员</span>
+        </div>
+
+        <div class="admin-settings-subtitle">
+          <h4>修改密码</h4>
         </div>
         <el-form
+          class="admin-security-form"
           :rules="rules"
           ref="formName"
           :model="form"
           label-position="top"
           hide-required-asterisk
         >
-          <el-form-item label="登录邮箱">
-            <el-input prefix-icon="el-icon-message" :disabled="true" v-model="form.email"></el-input>
-          </el-form-item>
-          <el-form-item prop="password" label="新密码">
-            <el-input
-              type="password"
-              prefix-icon="el-icon-lock"
-              show-password
-              autocomplete="new-password"
-              v-model="form.password"
-            ></el-input>
-          </el-form-item>
-          <el-form-item prop="password2" label="确认新密码">
-            <el-input
-              type="password"
-              prefix-icon="el-icon-lock"
-              show-password
-              autocomplete="new-password"
-              v-model="form.password2"
-              @keyup.enter.native="onSubmit"
-            ></el-input>
-          </el-form-item>
-          <el-button type="primary" icon="el-icon-check" @click="onSubmit">更新密码</el-button>
+          <div class="admin-password-grid">
+            <el-form-item prop="password" label="新密码">
+              <el-input
+                type="password"
+                prefix-icon="el-icon-lock"
+                show-password
+                autocomplete="new-password"
+                v-model="form.password"
+              ></el-input>
+            </el-form-item>
+            <el-form-item prop="password2" label="确认新密码">
+              <el-input
+                type="password"
+                prefix-icon="el-icon-lock"
+                show-password
+                autocomplete="new-password"
+                v-model="form.password2"
+                @keyup.enter.native="onSubmit"
+              ></el-input>
+            </el-form-item>
+          </div>
+          <div class="admin-settings-actions">
+            <el-button type="primary" icon="el-icon-check" @click="onSubmit">更新密码</el-button>
+          </div>
         </el-form>
       </section>
 
       <section class="admin-settings-panel admin-maintenance-panel">
         <div class="admin-settings-title">
           <span class="admin-settings-icon"><i class="el-icon-coin"></i></span>
-          <h3>数据维护</h3>
+          <div>
+            <h3>数据维护</h3>
+            <span>导航分类与站点数据</span>
+          </div>
         </div>
         <div class="admin-maintenance-action">
           <div>

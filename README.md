@@ -449,11 +449,15 @@ on:
 
 ### 本地手动执行
 
+保活脚本同时兼容两组变量名。推荐直接使用和前端一致的 `VUE_APP_*` 变量：
+
 ```bash
-SUPABASE_URL=https://your-project-ref.supabase.co \
-SUPABASE_ANON_KEY=your-anon-or-publishable-key \
+VUE_APP_SUPABASE_URL=https://your-project-ref.supabase.co \
+VUE_APP_SUPABASE_ANON_KEY=your-anon-or-publishable-key \
 node cron/supabase.js
 ```
+
+GitHub Actions 会从仓库 Secrets 读取 `SUPABASE_URL` 和 `SUPABASE_ANON_KEY`，再将它们注入为 `VUE_APP_SUPABASE_URL` 和 `VUE_APP_SUPABASE_ANON_KEY`。
 
 注意：
 

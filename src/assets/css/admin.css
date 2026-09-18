@@ -420,7 +420,7 @@
 
 .admin-settings-grid {
   display: grid;
-  grid-template-columns: minmax(0, 620px) minmax(280px, 1fr);
+  grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
   align-items: start;
   gap: 20px;
 }
@@ -446,6 +446,14 @@
   font-weight: 650;
 }
 
+.admin-settings-title > div > span {
+  display: block;
+  margin-top: 4px;
+  color: #87918c;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
 .admin-settings-icon {
   width: 36px;
   height: 36px;
@@ -456,6 +464,126 @@
   color: #236a4d;
   background: #e7f2eb;
   font-size: 17px;
+}
+
+.admin-account-summary {
+  min-height: 76px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #f7f9f8;
+  border: 1px solid #e5eae7;
+  border-radius: 6px;
+}
+
+.admin-account-avatar {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #236a4d;
+  background: #e2efe7;
+  border-radius: 50%;
+  font-size: 18px;
+}
+
+.admin-account-details {
+  min-width: 0;
+  flex: 1;
+}
+
+.admin-account-details span {
+  display: block;
+  margin-bottom: 4px;
+  color: #87918c;
+  font-size: 12px;
+}
+
+.admin-account-details strong {
+  display: block;
+  overflow: hidden;
+  color: #2b3530;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-account-role {
+  flex: 0 0 auto;
+  padding: 5px 9px;
+  color: #236a4d;
+  background: #e7f2eb;
+  border: 1px solid #cfe4d7;
+  border-radius: 4px;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.admin-settings-subtitle {
+  margin: 24px 0 14px;
+  padding-top: 22px;
+  border-top: 1px solid #edf0ee;
+}
+
+.admin-settings-subtitle h4 {
+  margin: 0;
+  color: #333d38;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.admin-password-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.admin-security-form.el-form--label-top .el-form-item__label {
+  width: 100%;
+  float: none;
+  display: block;
+  padding: 0 0 7px;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.admin-security-form .el-form-item__content {
+  width: 100%;
+  margin-left: 0 !important;
+}
+
+.admin-security-form .el-form-item {
+  width: 100%;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.admin-security-form .el-input,
+.admin-security-form .el-input__inner {
+  width: 100% !important;
+}
+
+.admin-security-form .el-form-item__error {
+  width: max-content;
+  max-width: 100%;
+  white-space: nowrap;
+}
+
+.admin-settings-actions {
+  margin-top: 22px;
+  padding-top: 18px;
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid #edf0ee;
+}
+
+.admin-settings-actions .el-button {
+  min-width: 118px;
 }
 
 .admin-settings-panel .el-form-item__label,
@@ -474,6 +602,10 @@
   gap: 18px;
   padding-top: 18px;
   border-top: 1px solid #edf0ee;
+}
+
+.admin-maintenance-panel {
+  background: #fbfcfb;
 }
 
 .admin-maintenance-action strong {
@@ -716,6 +848,11 @@
   .admin-category-selects {
     grid-template-columns: 1fr;
   }
+
+  .admin-password-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -752,6 +889,18 @@
 
   .admin-settings-panel {
     padding: 18px;
+  }
+
+  .admin-account-summary {
+    padding: 13px;
+  }
+
+  .admin-account-role {
+    display: none;
+  }
+
+  .admin-settings-actions .el-button {
+    width: 100%;
   }
 
   .admin-maintenance-action {
