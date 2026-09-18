@@ -39,25 +39,31 @@
           hide-required-asterisk
         >
           <div class="admin-password-grid">
-            <el-form-item prop="password" label="新密码">
-              <el-input
-                type="password"
-                prefix-icon="el-icon-lock"
-                show-password
-                autocomplete="new-password"
-                v-model="form.password"
-              ></el-input>
-            </el-form-item>
-            <el-form-item prop="password2" label="确认新密码">
-              <el-input
-                type="password"
-                prefix-icon="el-icon-lock"
-                show-password
-                autocomplete="new-password"
-                v-model="form.password2"
-                @keyup.enter.native="onSubmit"
-              ></el-input>
-            </el-form-item>
+            <div class="admin-password-field">
+              <div class="admin-field-label">新密码</div>
+              <el-form-item prop="password">
+                <el-input
+                  type="password"
+                  prefix-icon="el-icon-lock"
+                  show-password
+                  autocomplete="new-password"
+                  v-model="form.password"
+                ></el-input>
+              </el-form-item>
+            </div>
+            <div class="admin-password-field">
+              <div class="admin-field-label">确认新密码</div>
+              <el-form-item prop="password2">
+                <el-input
+                  type="password"
+                  prefix-icon="el-icon-lock"
+                  show-password
+                  autocomplete="new-password"
+                  v-model="form.password2"
+                  @keyup.enter.native="onSubmit"
+                ></el-input>
+              </el-form-item>
+            </div>
           </div>
           <div class="admin-settings-actions">
             <el-button type="primary" icon="el-icon-check" @click="onSubmit">更新密码</el-button>

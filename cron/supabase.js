@@ -11,9 +11,9 @@ if (!supabaseUrl || !supabaseAnonKey) {
 const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 async function keepAlive() {
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('category')
-    .select('id')
+    .select('id, name')
     .limit(1)
 
   if (error) {
@@ -21,6 +21,7 @@ async function keepAlive() {
   }
 
   console.log(`[${new Date().toISOString()}] Supabase keep-alive success`)
+  console.log('Query result:', JSON.stringify(data || [], null, 2))
 }
 
 keepAlive().catch(error => {
