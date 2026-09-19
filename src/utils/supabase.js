@@ -56,10 +56,30 @@ function getFileExt(file) {
   return typeExtMap[file.type] || 'png'
 }
 
-export default supabase
+const MAIN_LIST_CACHE_KEY = 'webstack-main-list-cache'
 
-// 获取首页数据
-export async function getMainList() {
+function readMainListCache() {
+  if (typeof window === 'undefined' || !window.localStorage) return null
+  try {
+    const cached = JSON.parse(window.localStorage.getItem(MAIN_LIST_CACHE_KEY) || 'null')
+    return Array.isArray(cached && cached.data) ? cached.data : null
+  } catch (error) {
+    return null
+  }
+}
+
+function writeMainListCache(data) {
+  try {
+    window.localStorage.setItem(
+      MAIN_LIST_CACHE_KEY,
+      JSON.stringify({ time: Date.now(), data })
+    )
+  } catch (error) {
+    // 缓存只是性能优化，存储不可用时继续使用在线数据。
+  }
+}
+
+async function fetchMainList() {
   const { data, error } = await supabase
     .from('category')
     .select(
@@ -73,7 +93,21 @@ export async function getMainList() {
     .order('id', { ascending: true })
     .eq('parent_id', 0)
   throwIfError(error)
-  return sortMainList(data || [])
+  const sortedData = sortMainList(data || [])
+  writeMainListCache(sortedData)
+  return sortedData
+}
+
+
+export default supabase
+
+// 获取首页数据
+export async function getMainList(options = {}) {
+  if (!options.refresh) {
+    const cachedData = readMainListCache()
+    if (cachedData) return cachedData
+  }
+  return fetchMainList()
 }
 
 export async function getCategoryList(params = {}) {

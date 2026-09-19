@@ -90,6 +90,16 @@
         </ul>
         <ul class="user-info-menu right-links list-inline list-unstyled">
           <li class="hidden-sm hidden-xs">
+            <a
+              href="javascript:void(0)"
+              :class="{ disabled: refreshing }"
+              @click="refreshList"
+            >
+              <i class="fa-refresh" :class="{ 'fa-spin': refreshing }"></i>
+              {{ refreshing ? "刷新中" : "刷新" }}
+            </a>
+          </li>
+          <li class="hidden-sm hidden-xs">
             <!-- <a href="https://github.com/Anjaxs/WebStack-vue" target="_blank">
               <i class="fa-github"></i> GitHub
             </a> -->
@@ -146,6 +156,7 @@ export default {
           flag: "./assets/images/flags/flag-us.png",
         },
       ],
+      refreshing: false,
     };
   },
   created() {
@@ -156,8 +167,25 @@ export default {
       return this.lang.key === "en" ? webItem.en_name : webItem.name;
     },
     async getList() {
-      this.items = await getMainList();
-      loadJs();
+      try {
+        this.items = await getMainList();
+        loadJs();
+      } catch (error) {
+        this.$message.error(error.message || "加载导航数据失败");
+      }
+    },
+    async refreshList() {
+      if (this.refreshing) return;
+      this.refreshing = true;
+      try {
+        this.items = await getMainList({ refresh: true });
+        loadJs();
+        this.$message.success("刷新成功");
+      } catch (error) {
+        this.$message.error(error.message || "刷新失败");
+      } finally {
+        this.refreshing = false;
+      }
     },
   },
   mounted() {
@@ -166,4 +194,10 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.user-info-menu a.disabled {
+  cursor: default;
+  opacity: 0.6;
+  pointer-events: none;
+}
+</style>
